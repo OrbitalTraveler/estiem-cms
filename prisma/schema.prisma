@@ -13,9 +13,8 @@ model User {
   lastName                  String
   email                     String?         @unique
   password                  String
-  isFirstSignIn             Boolean
+  isVerified                Boolean         @default(false)
   image                     String?
-  accounts                  Account[]
   role                      UserRole        @default(MEMBER)
   posts                     Post[]
 
@@ -27,26 +26,6 @@ enum UserRole {
   ADMIN
   LEADER
   MEMBER
-}
-
-model Account {
-  id                        String  @id @default(cuid())
-  userId                    String  @unique
-  type                      String
-  provider                  String
-  providerAccountId         String
-  refresh_token             String? @db.Text
-  access_token              String? @db.Text
-  expires_at                Int?
-  token_type                String?
-  scope                     String?
-  id_token                  String? @db.Text
-  session_state             String?
-
-  user                      User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@index([userId])
 }
 
 model PasswordResetToken {

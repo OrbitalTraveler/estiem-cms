@@ -21,25 +21,11 @@ export const {
     signIn: "/auth/sign-in",
     error: "/auth/error",
   },
-  events: {
-    async linkAccount({ user }) {
-      await db.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          isFirstSignIn: false,
-        },
-      });
-    },
-  },
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider !== "credentials") return true;
-
+    async signIn({ user }) {
       const existingUser = await getUserById(user.id as string);
 
-      if (existingUser?.isFirstSignIn) return false;
+      if (existingUser?.isVerified) return false;
 
       return true;
     },
@@ -68,6 +54,7 @@ export const {
 
       token.name =
         existingUser.firstName + " " + existingUser.lastName;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       token.role = existingUser.role;
 

@@ -5,10 +5,9 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
-import { sendFirstPasswordEmail } from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
-export const login = async (
+export const signInAction = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null
 ) => {
@@ -30,9 +29,8 @@ export const login = async (
     return { error: "Email does not exist!" };
   }
 
-  // TODO: See if this logic is needed, and if so, implement it
-  // either redirect to a page to set the password or send an email
-  if (existingUser.isFirstSignIn) {
+  if (existingUser.isVerified === false) {
+    return { error: "Please set  your password!" };
   }
 
   try {
