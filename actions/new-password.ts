@@ -35,7 +35,9 @@ export const newPassword = async (
     return { error: "Token has expired!" };
   }
 
-  const existingUser = await getUserByEmail(existingToken.email);
+  const existingUser = existingToken.userEmail
+    ? await getUserByEmail(existingToken.userEmail)
+    : null;
 
   if (!existingUser) {
     return { error: "Email does not exist!" };

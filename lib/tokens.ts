@@ -45,7 +45,7 @@ export const generatePasswordResetToken = async (email: string) => {
 
   const passwordResetToken = await db.passwordResetToken.create({
     data: {
-      email,
+      userEmail: email,
       token,
       expires,
     },
