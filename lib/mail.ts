@@ -29,16 +29,24 @@ const sendMail = async (mailOptions: MailOptions) => {
   }
 };
 
-export const sendFirstPasswordEmail = async (
+export const sendFirstLoginMail = async (
   email: string,
   token: string
 ) => {
+  const firstLoginLink = `http://localhost:3000/auth/new-password?token=${token}`;
+
   const mailOptions = {
     from: process.env.NEXT_SUPPORT_EMAIL_USERNAME,
     to: email,
     subject: "First Password",
     // TODO: Create a template for the email
-    html: `${token}`,
+    html: `
+      <h1>ESTIEM CMS</h1>
+      <p>
+        Kliknite na sledeci link kako biste postavili lozinku.
+      </p>
+      <a href="${firstLoginLink}">Postavi lozinku</a>
+    `,
   };
 
   await sendMail(mailOptions);

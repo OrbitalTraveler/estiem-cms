@@ -7,13 +7,15 @@ import * as z from "zod";
 // TODO: Create sendPasswordResetEmail function take a look at mail.ts under lib folder
 // Take a look at the mail.ts file to see an example of how to create a function that sends an email
 // for the password reset, dont bother making email templates. Just send the token in the email
-import { ResetSchema } from "@/schemas";
+import { ResetPasswordSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { sendPasswordResetEmail } from "@/lib/mail";
-import { generatePasswordResetToken } from "@/lib/tokens";
+import { generatePasswordToken } from "@/lib/tokens";
 
-export const reset = async (values: z.infer<typeof ResetSchema>) => {
-  const validatedFields = ResetSchema.safeParse(values);
+export const reset = async (
+  values: z.infer<typeof ResetPasswordSchema>
+) => {
+  const validatedFields = ResetPasswordSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Invalid emaiL!" };
@@ -27,11 +29,15 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     return { error: "Email not found!" };
   }
 
-  const passwordResetToken = await generatePasswordResetToken(email);
-  await sendPasswordResetEmail(
-    passwordResetToken.userEmail,
-    passwordResetToken.token
-  );
+  const passwordResetToken = await generatePasswordToken(email);
+  if (passwordResetToken.userEmail) {
+    await sendPasswordResetEmail(
+      passwordResetToken.userEmail,
+      passwordResetToken.token
+    );
+  } else {
+    return { error: "Email not found!" };
+  }
 
   return { success: "Reset email sent!" };
 };

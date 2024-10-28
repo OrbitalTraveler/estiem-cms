@@ -53,8 +53,11 @@ export default function SignInPage() {
           src="/images/sign-in-hero.png"
           alt="Background"
           fill={true}
-          objectFit="cover"
+          sizes="100%"
           className="opacity-50"
+          priority
+          blurDataURL="/images/estiem-cms-logo.svg"
+          placeholder="blur"
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-background p-8">
           <motion.h1
@@ -64,11 +67,12 @@ export default function SignInPage() {
             transition={{ delay: 0.3 }}
           >
             <Image
-              src="/estiem-cms-logo.svg"
+              src="/images/estiem-cms-logo.svg"
               alt="EstiemCMS Logo"
-              width={464}
-              height={464}
+              width={0}
+              height={0}
               className="mx-auto"
+              style={{ width: "464px", height: "auto" }}
             />
           </motion.h1>
           <motion.p
@@ -78,11 +82,12 @@ export default function SignInPage() {
             transition={{ delay: 0.4 }}
           >
             <Image
-              src="/estiem-cms-moto.svg"
+              src="/images/estiem-cms-moto.svg"
               alt="EstiemCMS Moto"
-              width={464}
-              height={464}
+              width={0}
+              height={0}
               className="mx-auto"
+              style={{ width: "464px", height: "auto" }}
             />
           </motion.p>
           <motion.a

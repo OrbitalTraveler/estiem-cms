@@ -1,6 +1,6 @@
 export const protectedRoutes = ["/"]; // later add all pages routes e.g "/create-post" & "[user_id]/settings"
 
-export const publicRoutes = [];
+export const publicRoutes = ["/create-user"];
 
 export const authRoutes = [
   "/auth/sign-in",

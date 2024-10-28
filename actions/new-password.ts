@@ -47,10 +47,10 @@ export const newPassword = async (
 
   await db.user.update({
     where: { id: existingUser.id },
-    data: { password: hashedPassword },
+    data: { password: hashedPassword, isVerified: true },
   });
 
-  await db.passwordResetToken.delete({
+  await db.passwordToken.delete({
     where: { id: existingToken.id },
   });
 

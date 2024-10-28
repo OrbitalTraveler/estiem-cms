@@ -1,53 +1,34 @@
 import { db } from "./db";
 import { v4 as uuidv4 } from "uuid";
 import { getPasswordResetTokenByEmail } from "@/data/password-reset-token";
-import { generatePassword } from "./utils";
+import { TokenType } from "@prisma/client";
 
-export const genereateUserFirstSignInPassword = async (
-  email: string
+export const generatePasswordToken = async (
+  email: string,
+  type: TokenType
 ) => {
-  const password = generatePassword();
-
-  const user = await db.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  await db.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      password,
-    },
-  });
-
-  return password;
-};
-
-export const generatePasswordResetToken = async (email: string) => {
   const token = uuidv4();
-  const expires = new Date(new Date().getTime() + 10 * 60 * 1000);
+  // Token expires in 15 minutes for password reset, 1 day for email verification
+  const expires = new Date(
+    new Date().getTime() +
+      (type === TokenType.EMAIL_VERIFICATION ? 86400000 : 900000)
+  );
   const existingToken = await getPasswordResetTokenByEmail(email);
 
   if (existingToken) {
-    await db.passwordResetToken.delete({
+    await db.passwordToken.delete({
       where: {
         id: existingToken.id,
       },
     });
   }
 
-  const passwordResetToken = await db.passwordResetToken.create({
+  const passwordResetToken = await db.passwordToken.create({
     data: {
       userEmail: email,
       token,
       expires,
+      type,
     },
   });
 

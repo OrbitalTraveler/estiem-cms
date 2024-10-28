@@ -5,12 +5,7 @@ import { UserRole } from "@prisma/client";
 import { db } from "./lib/db";
 import { getUserById } from "./data/user";
 
-export const {
-  handlers: { GET, POST },
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
   ...authConfig,
