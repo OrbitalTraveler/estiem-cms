@@ -17,26 +17,32 @@ model User {
   image                     String?
   role                      UserRole        @default(MEMBER)
   posts                     Post[]
-  passwordResetTokens       PasswordResetToken[]
+  passwordResetTokens       PasswordToken[]
 
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
-
 }
 
 enum UserRole {
+  SUPERADMIN
   ADMIN
   LEADER
   MEMBER
 }
 
-model PasswordResetToken {
+model PasswordToken {
   id                        String      @id @default(cuid())
   token                     String      @unique
   expires                   DateTime
+  type                      TokenType
 
   userEmail                 String?
   user                      User? @relation(fields: [userEmail], references: [email])
+}
+
+enum TokenType {
+  PASSWORD_RESET
+  EMAIL_VERIFICATION
 }
 
 model Post {
@@ -59,7 +65,6 @@ model Post {
 
 enum PostStatus {
   ACCEPTED
-  REJECTED
   RETURNED
   PENDING
 }

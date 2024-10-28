@@ -11,6 +11,7 @@ export const {
   signOut,
   auth,
 } = NextAuth({
+  secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
   ...authConfig,
   session: {
@@ -25,7 +26,7 @@ export const {
     async signIn({ user }) {
       const existingUser = await getUserById(user.id as string);
 
-      if (existingUser?.isVerified) return false;
+      if (!existingUser?.isVerified) return false;
 
       return true;
     },

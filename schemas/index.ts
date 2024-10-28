@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { UserRole } from "@prisma/client";
 
-export const LoginSchema = z.object({
+export const SignInSchema = z.object({
   email: z
     .string()
     .email("Unesite ispravnu email adresu")
@@ -49,7 +49,7 @@ export const NewPasswordSchema = z.object({
     ),
 });
 
-export const NewUserSchema = z.object({
+export const CreateUserSchema = z.object({
   firstName: z.string().min(2, {
     message: "Ime mora imati najmanje 2 karaktera",
   }),
@@ -63,5 +63,10 @@ export const NewUserSchema = z.object({
       message:
         "Registracija novog korisnika je dozvoljena samo putem estiem.org emaila",
     }),
-  role: z.enum([UserRole.MEMBER, UserRole.LEADER, UserRole.ADMIN]),
+  role: z.enum([
+    UserRole.MEMBER,
+    UserRole.LEADER,
+    UserRole.ADMIN,
+    UserRole.SUPERADMIN,
+  ]),
 });
