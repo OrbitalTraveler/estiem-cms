@@ -3,15 +3,15 @@
 import * as z from "zod";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
-import { LoginSchema } from "@/schemas";
+import { SignInSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const signInAction = async (
-  values: z.infer<typeof LoginSchema>,
+  values: z.infer<typeof SignInSchema>,
   callbackUrl?: string | null
 ) => {
-  const validatedFields = LoginSchema.safeParse(values);
+  const validatedFields = SignInSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
@@ -30,7 +30,7 @@ export const signInAction = async (
   }
 
   if (existingUser.isVerified === false) {
-    return { error: "Please set  your password!" };
+    return { error: "Please set your password!" };
   }
 
   try {
@@ -51,4 +51,6 @@ export const signInAction = async (
 
     throw error;
   }
+
+  return { success: "Signed in!" };
 };
