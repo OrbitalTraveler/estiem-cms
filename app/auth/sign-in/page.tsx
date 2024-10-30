@@ -55,9 +55,7 @@ export default function SignInPage() {
           fill={true}
           sizes="100%"
           className="opacity-50"
-          priority
-          blurDataURL="/images/estiem-cms-logo.svg"
-          placeholder="blur"
+          priority={true}
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-background p-8">
           <motion.h1
